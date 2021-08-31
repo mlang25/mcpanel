@@ -39,6 +39,11 @@ class mcpanel():
                 return self.con.get_output(), 200
             return "No Data", 204
 
+    def login(self):
+        if self.auth.CheckPassword(request.args.get('key')) == True:
+            return "OK", 200
+        return "Wrong Password", 403
+
 Mcpanel = mcpanel()
 
 @app.route('/start-server')
@@ -52,6 +57,10 @@ def send_command(command):
 @app.route('/get_unread')
 def get_unread():
     return Mcpanel.get_unread()
+
+@app.route('/login')
+def login():
+    return Mcpanel.login()
 
 
 app.run()
