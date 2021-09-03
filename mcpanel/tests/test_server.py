@@ -26,6 +26,17 @@ def test_start(setup_module):
     assert res.latency > 0
 
 
+def test_cmd(setup_module):
+    assert requests.get(SERVER_URL+"/cmd/tps?key=" +
+                        PASSWORD).status_code != 500
+    time.sleep(2)
+
+def test_unread(setup_module):
+    res = requests.get(SERVER_URL+"/cmd/get_unread?key=" +
+                       PASSWORD)
+    assert res.status_code == 200
+    assert len(res.content) != 0
+
 def test_stop(setup_module):
     assert requests.get(SERVER_URL+"/cmd/stop?key=" +
                         PASSWORD).status_code != 500
@@ -33,5 +44,6 @@ def test_stop(setup_module):
     try:
         time.sleep(2)
         res = ser.status()
-    except ConnectionAbortedError:
-        pass
+    except ConnectionRefusedError:
+        return True
+    assert False

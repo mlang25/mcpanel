@@ -38,6 +38,7 @@ class mcpanel():
             if self.con.check_new_data():
                 return self.con.get_output(), 200
             return "No Data", 204
+        return "Permission Denied", 500
 
     def login(self):
         if self.auth.CheckPassword(request.args.get('key')) == True:
